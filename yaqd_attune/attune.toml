@@ -1,6 +1,6 @@
 protocol = "attune"
-doc = ""
-traits = ["is-daemon"]
+doc="yaq daemon representing an attune instrument"
+traits=["has-limits", "is-homeable", "is-daemon"]
 
 [links]
 source = "https://gitlab.com/yaq/yaqd-attune"
@@ -9,9 +9,98 @@ bugtracker = "https://gitlab.com/yaq/yaqd-attune/-/issues"
 [installation]
 PyPI = "https://pypi.org/project/yaqd-attune"
 
+[[types]]
+type="record"
+name="Transition"
+fields=[{name="type", type="string"}]
+
+[[types]]
+type="record"
+name="Motor"
+fields=[{name="name", type="string"}]
+
+[[types]]
+type="record"
+name="Tune"
+[[types.fields]]
+name="name"
+type="string"
+[[types.fields]]
+name="independent"
+type={type="array", items="float"}
+[[types.fields]]
+name="dependent"
+type={type="array", items="float"}
+
+
+[[types]]
+type="record"
+name="Arrangement"
+[[types.fields]]
+name="name"
+type="string"
+[[types.fields]]
+name="tunes"
+type={type="array", items="Tune"}
+
+[[types]]
+type="record"
+name="Instrument"
+[[types.fields]]
+name="name"
+type="string"
+[[types.fields]]
+name="arrangements"
+type={type="map", values="Arrangement"}
+[[types.fields]]
+name="motors"
+type={type="map", values="Motor"}
+[[types.fields]]
+name="transition"
+type="Transition"
+
 [config]
+motors.type = "map"
+motors.values = "int"
+motors.doc = "mapping of motor names (must be a superset of those in the instrument) to yaq ports"
 
 [state]
+arrangement.type=["null", "string"]
+arrangement.default="__null__"
+arrangement.doc = "Currently selected arrangement. If null, use whichever arrangment fits the requested position, and error if there are multiple"
 
 [messages]
+[messages.reload_instrument]
+doc = "Reload the instrument from the attune store."
 
+[messages.get_instrument]
+response = "Instrument"
+doc = "Get the currently in use instrument object"
+
+[messages.set_instrument]
+request = [{name="instrument", type="Instrument"}]
+doc = "Set the currently in use instrument object"
+
+[messages.get_arrangement]
+response = "string"
+doc = "Get the currently in use arrangement name"
+
+[messages.get_all_arrangements]
+response = {type="array", items="string"}
+doc = "Get all currently valid arrangement names"
+
+[messages.set_arrangement]
+request = [{name="arrangement", type="string"}]
+doc = "Get the currently in use arrangement name"
+
+[messages.set_position_except]
+request = [{name="position", type="float"}, {name="exceptions", type="array", items="string"}]
+doc = "Set the position, but ignore some motors"
+
+[messages.get_motor_yaq_params]
+response = {type="map", values="int"}
+doc = "Get the ports for motors."
+
+[messages.get_motor_names]
+response = {type="array", items="string"}
+doc = "Get list of motors"
