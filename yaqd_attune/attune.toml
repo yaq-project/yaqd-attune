@@ -1,0 +1,17 @@
+protocol = "attune"
+doc = ""
+traits = ["is-daemon"]
+
+[links]
+source = "https://gitlab.com/yaq/yaqd-attune"
+bugtracker = "https://gitlab.com/yaq/yaqd-attune/-/issues"
+
+[installation]
+PyPI = "https://pypi.org/project/yaqd-attune"
+
+[config]
+
+[state]
+
+[messages]
+
