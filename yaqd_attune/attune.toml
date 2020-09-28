@@ -16,7 +16,7 @@ fields=[{name="type", type="string"}]
 
 [[types]]
 type="record"
-name="Motor"
+name="Setable"
 fields=[{name="name", type="string"}]
 
 [[types]]
@@ -53,16 +53,16 @@ type="string"
 name="arrangements"
 type={type="map", values="Arrangement"}
 [[types.fields]]
-name="motors"
-type={type="map", values="Motor"}
+name="setables"
+type={type="map", values="Setable"}
 [[types.fields]]
 name="transition"
 type="Transition"
 
 [config]
-motors.type = "map"
-motors.values = "int"
-motors.doc = "mapping of motor names (must be a superset of those in the instrument) to yaq ports"
+setables.type = "map"
+setables.values = "int"
+setables.doc = "mapping of setable names (must be a superset of those in the instrument) to yaq ports"
 
 [state]
 arrangement.type=["null", "string"]
@@ -70,8 +70,6 @@ arrangement.default="__null__"
 arrangement.doc = "Currently selected arrangement. If null, use whichever arrangment fits the requested position, and error if there are multiple"
 
 [messages]
-[messages.reload_instrument]
-doc = "Reload the instrument from the attune store."
 
 [messages.get_instrument]
 response = "Instrument"
@@ -79,7 +77,7 @@ doc = "Get the currently in use instrument object"
 
 [messages.set_instrument]
 request = [{name="instrument", type="Instrument"}]
-doc = "Set the currently in use instrument object"
+doc = "Set the currently in use instrument object. Also triggers a restart"
 
 [messages.get_arrangement]
 response = "string"
@@ -95,12 +93,25 @@ doc = "Get the currently in use arrangement name"
 
 [messages.set_position_except]
 request = [{name="position", type="float"}, {name="exceptions", type="array", items="string"}]
-doc = "Set the position, but ignore some motors"
+doc = "Set the position, but ignore some setables"
 
-[messages.get_motor_yaq_params]
+[messages.get_setable_yaq_params]
 response = {type="map", values="int"}
-doc = "Get the ports for motors."
+doc = "Get the ports for setables."
 
-[messages.get_motor_names]
+[messages.get_setable_names]
 response = {type="array", items="string"}
-doc = "Get list of motors"
+doc = "Get list of setables"
+
+[messages.set_setable_positions]
+request = [{name="setables", type="map", values="float"}]
+doc = "Set underlying setables, accepts a mapping of names to positions, in native units."
+
+[messages.get_setable_positions]
+response = {type="map", values="float"}
+doc = "Get underlying setables, provides a mapping of names to positions, in native units."
+
+[messages.home_setables]
+response = {type="array", items="string"}
+doc = "Home underlying setables, accepts a list of names to home."
+
