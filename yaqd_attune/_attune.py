@@ -3,6 +3,8 @@ __all__ = ["Attune"]
 import asyncio
 from typing import Dict, Any, List
 
+import attune
+import yaqc
 from yaqd_core import ContinuousHardware
 
 
@@ -33,7 +35,7 @@ class Attune(ContinuousHardware):
 
     def set_instrument(self, instrument):
         self._instrument = attune.Instrument(**instrument)
-        self._instrument.store()
+        attune.store(self._instrument)
         self.shutdown(restart=True)
 
     def get_arrangement(self):
@@ -43,19 +45,19 @@ class Attune(ContinuousHardware):
         self._state["arrangement"] = arrangement
 
     def get_all_arrangements(self):
-        return list(instrument.arrangements.keys())
+        return list(self._instrument.arrangements.keys())
 
     def get_setable_yaq_params(self):
-        return self.config["setables"]
+        return self._config["setables"]
 
     def get_setable_names(self):
         return list(self._setables.keys())
 
-    def set_setable_postitions(self, setables):
+    def set_setable_positions(self, setables):
         for name, set_pos in setables.items():
             self._setables[name].set_position(set_pos)
 
-    def get_setable_postitions(self):
+    def get_setable_positions(self):
         return {k: v.get_position() for k, v in self._setables.items()}
 
     def home_setables(self, setables):

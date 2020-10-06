@@ -23,11 +23,6 @@
                 "string"
             ]
         },
-        "motors": {
-            "doc": "mapping of motor names (must be a superset of those in the instrument) to yaq ports",
-            "type": "map",
-            "values": "int"
-        },
         "out_of_limits": {
             "default": "closest",
             "doc": "Control behavior of daemon when set_position is given a value outside of limits.",
@@ -50,6 +45,11 @@
                 "null",
                 "string"
             ]
+        },
+        "setables": {
+            "doc": "mapping of setable names (must be a superset of those in the instrument) to yaq ports",
+            "type": "map",
+            "values": "int"
         }
     },
     "doc": "yaq daemon representing an attune instrument",
@@ -107,26 +107,34 @@
                 "type": "array"
             }
         },
-        "get_motor_names": {
-            "doc": "Get list of motors",
+        "get_position": {
+            "doc": "Get current daemon position.",
+            "request": [],
+            "response": "float"
+        },
+        "get_setable_names": {
+            "doc": "Get list of setables",
             "request": [],
             "response": {
                 "items": "string",
                 "type": "array"
             }
         },
-        "get_motor_yaq_params": {
-            "doc": "Get the ports for motors.",
+        "get_setable_positions": {
+            "doc": "Get underlying setables, provides a mapping of names to positions, in native units.",
+            "request": [],
+            "response": {
+                "type": "map",
+                "values": "float"
+            }
+        },
+        "get_setable_yaq_params": {
+            "doc": "Get the ports for setables.",
             "request": [],
             "response": {
                 "type": "map",
                 "values": "int"
             }
-        },
-        "get_position": {
-            "doc": "Get current daemon position.",
-            "request": [],
-            "response": "float"
         },
         "get_state": {
             "doc": "Get version of the running daemon",
@@ -145,6 +153,14 @@
             "doc": "Initiates the homing procedure.\nThe daemon will report as busy during the homing procedure.\n After the homing procedure is complete, the daemon will return to the current destination.\n",
             "request": [],
             "response": "null"
+        },
+        "home_setables": {
+            "doc": "Home underlying setables, accepts a list of names to home.",
+            "request": [],
+            "response": {
+                "items": "string",
+                "type": "array"
+            }
         },
         "id": {
             "doc": "JSON object with information to identify the daemon, including name, kind, make, model, serial.\n",
@@ -167,11 +183,6 @@
             ],
             "response": "boolean"
         },
-        "reload_instrument": {
-            "doc": "Reload the instrument from the attune store.",
-            "request": [],
-            "response": "null"
-        },
         "set_arrangement": {
             "doc": "Get the currently in use arrangement name",
             "request": [
@@ -183,7 +194,7 @@
             "response": "null"
         },
         "set_instrument": {
-            "doc": "Set the currently in use instrument object",
+            "doc": "Set the currently in use instrument object. Also triggers a restart",
             "request": [
                 {
                     "name": "instrument",
@@ -203,16 +214,18 @@
             "response": "null"
         },
         "set_position_except": {
-            "doc": "Set the position, but ignore some motors",
+            "doc": "Set the position, but ignore some setables",
             "request": [
                 {
                     "name": "position",
                     "type": "float"
                 },
                 {
-                    "items": "string",
                     "name": "exceptions",
-                    "type": "array"
+                    "type": {
+                        "items": "string",
+                        "type": "array"
+                    }
                 }
             ],
             "response": "null"
@@ -226,6 +239,19 @@
                 }
             ],
             "response": "float"
+        },
+        "set_setable_positions": {
+            "doc": "Set underlying setables, accepts a mapping of names to positions, in native units.",
+            "request": [
+                {
+                    "name": "setables",
+                    "type": {
+                        "type": "map",
+                        "values": "float"
+                    }
+                }
+            ],
+            "response": "null"
         },
         "shutdown": {
             "doc": "Cleanly shutdown (or restart) daemon.",
@@ -269,10 +295,10 @@
     },
     "trait": "has-position",
     "traits": [
-        "has-position",
         "is-daemon",
         "is-homeable",
-        "has-limits"
+        "has-limits",
+        "has-position"
     ],
     "types": [
         {
@@ -292,15 +318,11 @@
                     "type": "string"
                 }
             ],
-            "name": "Motor",
+            "name": "Setable",
             "type": "record"
         },
         {
             "fields": [
-                {
-                    "name": "name",
-                    "type": "string"
-                },
                 {
                     "name": "independent",
                     "type": {
@@ -328,8 +350,8 @@
                 {
                     "name": "tunes",
                     "type": {
-                        "items": "Tune",
-                        "type": "array"
+                        "type": "map",
+                        "values": "Tune"
                     }
                 }
             ],
@@ -350,10 +372,10 @@
                     }
                 },
                 {
-                    "name": "motors",
+                    "name": "setables",
                     "type": {
                         "type": "map",
-                        "values": "Motor"
+                        "values": "Setable"
                     }
                 },
                 {

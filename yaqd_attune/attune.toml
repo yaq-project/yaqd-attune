@@ -23,9 +23,6 @@ fields=[{name="name", type="string"}]
 type="record"
 name="Tune"
 [[types.fields]]
-name="name"
-type="string"
-[[types.fields]]
 name="independent"
 type={type="array", items="float"}
 [[types.fields]]
@@ -41,7 +38,7 @@ name="name"
 type="string"
 [[types.fields]]
 name="tunes"
-type={type="array", items="Tune"}
+type={type="map", values="Tune"}
 
 [[types]]
 type="record"
@@ -92,8 +89,13 @@ request = [{name="arrangement", type="string"}]
 doc = "Get the currently in use arrangement name"
 
 [messages.set_position_except]
-request = [{name="position", type="float"}, {name="exceptions", type="array", items="string"}]
 doc = "Set the position, but ignore some setables"
+[[messages.set_position_except.request]]
+name="position"
+type="float"
+[[messages.set_position_except.request]]
+name="exceptions"
+type={type="array", items="string"}
 
 [messages.get_setable_yaq_params]
 response = {type="map", values="int"}
@@ -104,8 +106,11 @@ response = {type="array", items="string"}
 doc = "Get list of setables"
 
 [messages.set_setable_positions]
-request = [{name="setables", type="map", values="float"}]
 doc = "Set underlying setables, accepts a mapping of names to positions, in native units."
+[[messages.set_setable_positions.request]]
+name="setables"
+type={type="map", values="float"}
+
 
 [messages.get_setable_positions]
 response = {type="map", values="float"}
