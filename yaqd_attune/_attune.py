@@ -15,6 +15,7 @@ class Attune(ContinuousHardware):
         super().__init__(name, config, config_filepath)
         self._instrument = attune.load(name)
         self._setables = {k: yaqc.Client(v) for k, v in config["setables"].items()}
+        self._set_limits()
 
     def _set_position(self, position):
         self.set_position_except(position)
@@ -34,6 +35,7 @@ class Attune(ContinuousHardware):
         return self._instrument.as_dict()
 
     def set_instrument(self, instrument):
+        self._busy = True
         self._instrument = attune.Instrument(**instrument)
         attune.store(self._instrument)
         self.shutdown(restart=True)
@@ -42,7 +44,11 @@ class Attune(ContinuousHardware):
         return self._state["arrangement"]
 
     def set_arrangement(self, arrangement):
+        if arrangement is not None and arrangement not in self._instrument.arrangements.keys():
+            raise ValueError("Arrangement not found")
+        self._busy = True
         self._state["arrangement"] = arrangement
+        self._set_limits()
 
     def get_all_arrangements(self):
         return list(self._instrument.arrangements.keys())
@@ -54,6 +60,7 @@ class Attune(ContinuousHardware):
         return list(self._setables.keys())
 
     def set_setable_positions(self, setables):
+        self._busy = True
         for name, set_pos in setables.items():
             self._setables[name].set_position(set_pos)
 
@@ -68,10 +75,21 @@ class Attune(ContinuousHardware):
     def home(self):
         self.home_setables(self._setables.keys())
 
+    def _set_limits(self):
+        if self._state["arrangement"] is None:
+            min_ = min(x.ind_min for x in self._instrument.arrangements.values())
+            max_ = max(x.ind_max for x in self._instrument.arrangements.values())
+            self._state["hw_limits"] = (min_, max_)
+        else:
+            self._state["hw_limits"] = (
+                self._instrument.arrangements[self._state["arrangement"]].ind_min,
+                self._instrument.arrangements[self._state["arrangement"]].ind_max,
+            )
+
     async def update_state(self):
         """Continually monitor and update the current daemon state."""
         while True:
-            self._busy = any([sa.busy() for sa in self._setables.values()])
+            self._busy = any(sa.busy() for sa in self._setables.values())
             if self._busy:
                 await asyncio.sleep(0.1)
             else:
