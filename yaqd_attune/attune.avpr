@@ -156,11 +156,16 @@
         },
         "home_setables": {
             "doc": "Home underlying setables, accepts a list of names to home.",
-            "request": [],
-            "response": {
-                "items": "string",
-                "type": "array"
-            }
+            "request": [
+                {
+                    "name": "setables",
+                    "type": {
+                        "items": "string",
+                        "type": "array"
+                    }
+                }
+            ],
+            "response": "null"
         },
         "id": {
             "doc": "JSON object with information to identify the daemon, including name, kind, make, model, serial.\n",
@@ -296,9 +301,9 @@
     "trait": "has-position",
     "traits": [
         "is-daemon",
-        "is-homeable",
+        "has-position",
         "has-limits",
-        "has-position"
+        "is-homeable"
     ],
     "types": [
         {

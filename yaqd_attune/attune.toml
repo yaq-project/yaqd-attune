@@ -117,6 +117,8 @@ response = {type="map", values="float"}
 doc = "Get underlying setables, provides a mapping of names to positions, in native units."
 
 [messages.home_setables]
-response = {type="array", items="string"}
 doc = "Home underlying setables, accepts a list of names to home."
+[[messages.home_setables.request]]
+name = "setables"
+type = {type="array", items="string"}
 

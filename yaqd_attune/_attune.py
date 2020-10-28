@@ -5,10 +5,10 @@ from typing import Dict, Any, List
 
 import attune
 import yaqc
-from yaqd_core import ContinuousHardware
+from yaqd_core import HasLimits, IsHomeable, HasPosition, IsDaemon
 
 
-class Attune(ContinuousHardware):
+class Attune(HasLimits, IsHomeable, HasPosition, IsDaemon):
     _kind = "attune"
 
     def __init__(self, name, config, config_filepath):
@@ -23,6 +23,7 @@ class Attune(ContinuousHardware):
     def set_position_except(self, position, exceptions=None):
         self._busy = True
         self._state["destination"] = position
+        self._state["position"] = position
         if exceptions is None:
             exceptions = []
         for name, set_pos in self._instrument(position, self._state["arrangement"]).items():
@@ -68,11 +69,13 @@ class Attune(ContinuousHardware):
         return {k: v.get_position() for k, v in self._setables.items()}
 
     def home_setables(self, setables):
+        self._busy = True
         for name in setables:
             if hasattr(self._setables[name], "home"):
                 self._setables[name].home()
 
     def home(self):
+        self._busy = True
         self.home_setables(self._setables.keys())
 
     def _set_limits(self):
