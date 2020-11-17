@@ -85,8 +85,8 @@ class Attune(HasLimits, IsHomeable, HasPosition, IsDaemon):
             self._state["hw_limits"] = (min_, max_)
         else:
             self._state["hw_limits"] = (
-                self._instrument.arrangements[self._state["arrangement"]].ind_min,
-                self._instrument.arrangements[self._state["arrangement"]].ind_max,
+                float(self._instrument.arrangements[self._state["arrangement"]].ind_min),
+                float(self._instrument.arrangements[self._state["arrangement"]].ind_max),
             )
 
     async def update_state(self):
