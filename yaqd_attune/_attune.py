@@ -3,8 +3,8 @@ __all__ = ["Attune"]
 import asyncio
 from typing import Dict, Any, List
 
-import attune
-import yaqc
+import attune  # type: ignore
+import yaqc  # type: ignore
 from yaqd_core import HasLimits, IsHomeable, HasPosition, IsDaemon
 
 
