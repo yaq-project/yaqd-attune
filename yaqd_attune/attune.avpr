@@ -390,8 +390,8 @@
         }
     },
     "traits": [
-        "has-position",
         "has-limits",
+        "has-position",
         "is-daemon",
         "is-homeable"
     ],
