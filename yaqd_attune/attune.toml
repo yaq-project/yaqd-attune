@@ -29,6 +29,15 @@ type={type="array", items="float"}
 name="dependent"
 type={type="array", items="float"}
 
+[[types]]
+type="record"
+name="DiscreteTune"
+[[types.fields]]
+name="ranges"
+type={type="map", values={type="array", items="float"}}
+[[types.fields]]
+name="default"
+type = ["null", "string"]
 
 [[types]]
 type="record"
@@ -38,7 +47,7 @@ name="name"
 type="string"
 [[types.fields]]
 name="tunes"
-type={type="map", values="Tune"}
+type={type="map", values=["Tune", "DiscreteTune"]}
 
 [[types]]
 type="record"
@@ -92,7 +101,7 @@ doc = "Get the currently in use arrangement name"
 doc = "Set the position, but ignore some setables"
 [[messages.set_position_except.request]]
 name="position"
-type="float"
+type=["float", "string"]
 [[messages.set_position_except.request]]
 name="exceptions"
 type={type="array", items="string"}
@@ -109,11 +118,11 @@ doc = "Get list of setables"
 doc = "Set underlying setables, accepts a mapping of names to positions, in native units."
 [[messages.set_setable_positions.request]]
 name="setables"
-type={type="map", values="float"}
+type={type="map", values=["float", "string"]}
 
 
 [messages.get_setable_positions]
-response = {type="map", values="float"}
+response = {type="map", values=["float", "string"]}
 doc = "Get underlying setables, provides a mapping of names to positions, in native units."
 
 [messages.home_setables]
