@@ -205,7 +205,10 @@
             "request": [],
             "response": {
                 "type": "map",
-                "values": "float"
+                "values": [
+                    "float",
+                    "string"
+                ]
             }
         },
         "get_setable_yaq_params": {
@@ -309,7 +312,10 @@
             "request": [
                 {
                     "name": "position",
-                    "type": "float"
+                    "type": [
+                        "float",
+                        "string"
+                    ]
                 },
                 {
                     "name": "exceptions",
@@ -339,7 +345,10 @@
                     "name": "setables",
                     "type": {
                         "type": "map",
-                        "values": "float"
+                        "values": [
+                            "float",
+                            "string"
+                        ]
                     }
                 }
             ],
@@ -439,6 +448,29 @@
         {
             "fields": [
                 {
+                    "name": "ranges",
+                    "type": {
+                        "type": "map",
+                        "values": {
+                            "items": "float",
+                            "type": "array"
+                        }
+                    }
+                },
+                {
+                    "name": "default",
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            ],
+            "name": "DiscreteTune",
+            "type": "record"
+        },
+        {
+            "fields": [
+                {
                     "name": "name",
                     "type": "string"
                 },
@@ -446,7 +478,10 @@
                     "name": "tunes",
                     "type": {
                         "type": "map",
-                        "values": "Tune"
+                        "values": [
+                            "Tune",
+                            "DiscreteTune"
+                        ]
                     }
                 }
             ],

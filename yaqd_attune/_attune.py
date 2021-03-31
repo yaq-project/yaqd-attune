@@ -29,7 +29,12 @@ class Attune(HasLimits, IsHomeable, HasPosition, IsDaemon):
         for name, set_pos in self._instrument(position, self._state["arrangement"]).items():
             if name in exceptions:
                 continue
-            self._setables[name].set_position(set_pos)
+            if isinstance(set_pos, str):
+                self._setables[name].set_identifier(set_pos)
+            elif set_pos is None:
+                pass  # discrete with no default, leave it where it is
+            else:
+                self._setables[name].set_position(set_pos)
         self._state["position"] = position
 
     def get_instrument(self):
@@ -63,7 +68,12 @@ class Attune(HasLimits, IsHomeable, HasPosition, IsDaemon):
     def set_setable_positions(self, setables):
         self._busy = True
         for name, set_pos in setables.items():
-            self._setables[name].set_position(set_pos)
+            if isinstance(set_pos, str):
+                self._setables[name].set_identifier(set_pos)
+            elif set_pos is None:
+                pass  # discrete with no default, leave it where it is
+            else:
+                self._setables[name].set_position(set_pos)
 
     def get_setable_positions(self):
         return {k: v.get_position() for k, v in self._setables.items()}
