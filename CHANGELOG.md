@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Fixed
+- Errant type for `set_position_except` that allowed strings to be passed
+
+### Changed
+- prefer double over float over the yaq interface
+
 ## [2021.3.0]
 
 ### Added
