@@ -206,7 +206,7 @@
             "response": {
                 "type": "map",
                 "values": [
-                    "float",
+                    "double",
                     "string"
                 ]
             }
@@ -312,10 +312,7 @@
             "request": [
                 {
                     "name": "position",
-                    "type": [
-                        "float",
-                        "string"
-                    ]
+                    "type": "double"
                 },
                 {
                     "name": "exceptions",
@@ -346,7 +343,7 @@
                     "type": {
                         "type": "map",
                         "values": [
-                            "float",
+                            "double",
                             "string"
                         ]
                     }
@@ -430,14 +427,14 @@
                 {
                     "name": "independent",
                     "type": {
-                        "items": "float",
+                        "items": "double",
                         "type": "array"
                     }
                 },
                 {
                     "name": "dependent",
                     "type": {
-                        "items": "float",
+                        "items": "double",
                         "type": "array"
                     }
                 }
@@ -452,7 +449,7 @@
                     "type": {
                         "type": "map",
                         "values": {
-                            "items": "float",
+                            "items": "double",
                             "type": "array"
                         }
                     }
