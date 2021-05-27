@@ -16,6 +16,7 @@ class Attune(HasLimits, IsHomeable, HasPosition, IsDaemon):
         self._instrument = attune.load(name)
         self._setables = {k: yaqc.Client(v) for k, v in config["setables"].items()}
         self._set_limits()
+        self._units = "nm"
 
     def _set_position(self, position):
         self.set_position_except(position)
