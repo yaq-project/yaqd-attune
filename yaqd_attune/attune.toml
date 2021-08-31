@@ -67,7 +67,7 @@ type="Transition"
 
 [config]
 setables.type = "map"
-setables.values = "int"
+setables.values = ["int", "string"]
 setables.doc = "mapping of setable names (must be a superset of those in the instrument) to yaq ports"
 
 [state]
@@ -130,4 +130,3 @@ doc = "Home underlying setables, accepts a list of names to home."
 [[messages.home_setables.request]]
 name = "setables"
 type = {type="array", items="string"}
-

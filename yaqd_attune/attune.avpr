@@ -86,7 +86,10 @@
         "setables": {
             "doc": "mapping of setable names (must be a superset of those in the instrument) to yaq ports",
             "type": "map",
-            "values": "int"
+            "values": [
+                "int",
+                "string"
+            ]
         }
     },
     "doc": "yaq daemon representing an attune instrument",

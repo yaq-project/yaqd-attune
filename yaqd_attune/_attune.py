@@ -14,7 +14,15 @@ class Attune(HasLimits, IsHomeable, HasPosition, IsDaemon):
     def __init__(self, name, config, config_filepath):
         super().__init__(name, config, config_filepath)
         self._instrument = attune.load(name)
-        self._setables = {k: yaqc.Client(v) for k, v in config["setables"].items()}
+
+        self._setables = dict()
+        for k, v in config["setables"].items():
+            if isinstance(v, int):
+                self._setables[k] = yaqc.Client(v)
+            else:
+                host, port = v.split(":")
+                self._setables[k] = yaqc.Client(port=int(port), host=host)
+
         self._set_limits()
         self._units = "nm"
 
