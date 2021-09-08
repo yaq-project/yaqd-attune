@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [2021.9.0]
+
 ### Fixed
 - Errant type for `set_position_except` that allowed strings to be passed
 - Provide units (currently statically "nm")
@@ -30,7 +32,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - initial release
 
-[Unreleased]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.3.0...master
+[Unreleased]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.9.0...master
+[2021.9.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.3.0...v2021.9.0
 [2021.3.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.2.0...v2021.3.0
 [2021.2.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.1.0...v2021.2.0
 [2021.1.0]: https://gitlab.com/yaq/yaqd-attune/-/tags/v2021.1.0
