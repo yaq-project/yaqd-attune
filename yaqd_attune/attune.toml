@@ -70,6 +70,11 @@ setables.type = "map"
 setables.values = ["int", "string"]
 setables.doc = "mapping of setable names (must be a superset of those in the instrument) to yaq ports"
 
+delays.type = "map"
+delays.values = ["int", "string"]
+delays.doc = "mapping of delay names to yaq ports. Delays will be informed when position or arrangement changes"
+delays.default = {}
+
 [state]
 arrangement.type=["null", "string"]
 arrangement.default="__null__"
@@ -86,7 +91,7 @@ request = [{name="instrument", type="Instrument"}]
 doc = "Set the currently in use instrument object. Also triggers a restart"
 
 [messages.get_arrangement]
-response = "string"
+response = ["null", "string"]
 doc = "Get the currently in use arrangement name"
 
 [messages.get_all_arrangements]
@@ -94,7 +99,7 @@ response = {type="array", items="string"}
 doc = "Get all currently valid arrangement names"
 
 [messages.set_arrangement]
-request = [{name="arrangement", type="string"}]
+request = [{name="arrangement", type=["null", "string"]}]
 doc = "Get the currently in use arrangement name"
 
 [messages.set_position_except]
@@ -107,12 +112,20 @@ name="exceptions"
 type={type="array", items="string"}
 
 [messages.get_setable_yaq_params]
-response = {type="map", values="int"}
+response = {type="map", values=["int", "string"]}
 doc = "Get the ports for setables."
 
 [messages.get_setable_names]
 response = {type="array", items="string"}
 doc = "Get list of setables"
+
+[messages.get_delay_yaq_params]
+response = {type="map", values=["int", "string"]}
+doc = "Get the ports for delays."
+
+[messages.get_delay_names]
+response = {type="array", items="string"}
+doc = "Get list of delays"
 
 [messages.set_setable_positions]
 doc = "Set underlying setables, accepts a mapping of names to positions, in native units."
@@ -130,3 +143,16 @@ doc = "Home underlying setables, accepts a list of names to home."
 [[messages.home_setables.request]]
 name = "setables"
 type = {type="array", items="string"}
+
+[fields]
+
+[fields.arrangement]
+type = "record"
+name = "field"
+[fields.arrangement.fields]
+getter = "get_arrangement"
+options_getter = "get_all_arrangements"
+setter = "set_arrangement"
+dynamic = true
+kind = "hinted"
+type = "string"
