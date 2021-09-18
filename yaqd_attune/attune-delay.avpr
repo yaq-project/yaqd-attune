@@ -1,19 +1,15 @@
 {
     "config": {
-        "delays": {
-            "default": {},
-            "doc": "mapping of delay names to yaq ports. Delays will be informed when position or arrangement changes",
-            "type": "map",
-            "values": [
-                "int",
-                "string"
-            ]
-        },
         "enable": {
             "default": true,
             "doc": "Disable this daemon. The kind entry-point will not attempt to start this daemon.",
             "origin": "is-daemon",
             "type": "boolean"
+        },
+        "factor": {
+            "default": 2,
+            "doc": "multiplier of the speed of light, use negative value to invert motion relative to the zero position",
+            "type": "int"
         },
         "limits": {
             "default": [
@@ -92,29 +88,16 @@
                 "string"
             ]
         },
-        "setables": {
-            "doc": "mapping of setable names (must be a superset of those in the instrument) to yaq ports",
-            "type": "map",
-            "values": [
+        "wrapped_daemon": {
+            "doc": "port or host:port string of the wrapped delay stage",
+            "type": [
                 "int",
                 "string"
             ]
         }
     },
-    "doc": "yaq daemon representing an attune instrument",
+    "doc": "yaq daemon representing an attune delay",
     "fields": {
-        "arrangement": {
-            "fields": {
-                "dynamic": true,
-                "getter": "get_arrangement",
-                "kind": "hinted",
-                "options_getter": "get_all_arrangements",
-                "setter": "set_arrangement",
-                "type": "string"
-            },
-            "name": "field",
-            "type": "record"
-        },
         "destination": {
             "fields": {
                 "dynamic": true,
@@ -138,6 +121,16 @@
             "name": "field",
             "type": "record"
         },
+        "offset": {
+            "fields": {
+                "dynamic": true,
+                "getter": "get_offset",
+                "kind": "normal",
+                "type": "double"
+            },
+            "name": "field",
+            "type": "record"
+        },
         "origin": "has-position",
         "position": {
             "fields": {
@@ -145,6 +138,17 @@
                 "getter": "get_position",
                 "kind": "hinted",
                 "setter": "set_position",
+                "type": "double"
+            },
+            "name": "field",
+            "type": "record"
+        },
+        "zero_position": {
+            "fields": {
+                "dynamic": true,
+                "getter": "get_zero_position",
+                "kind": "normal",
+                "setter": "set_zero_position",
                 "type": "double"
             },
             "name": "field",
@@ -165,22 +169,6 @@
             "request": [],
             "response": "boolean"
         },
-        "get_all_arrangements": {
-            "doc": "Get all currently valid arrangement names",
-            "request": [],
-            "response": {
-                "items": "string",
-                "type": "array"
-            }
-        },
-        "get_arrangement": {
-            "doc": "Get the currently in use arrangement name",
-            "request": [],
-            "response": [
-                "null",
-                "string"
-            ]
-        },
         "get_config": {
             "doc": "Full configuration for the individual daemon as defined in the TOML file.\nThis includes defaults and shared settings not directly specified in the daemon-specific TOML table.\n",
             "origin": "is-daemon",
@@ -193,23 +181,28 @@
             "request": [],
             "response": "string"
         },
-        "get_delay_names": {
-            "doc": "Get list of delays",
-            "request": [],
-            "response": {
-                "items": "string",
-                "type": "array"
-            }
-        },
-        "get_delay_yaq_params": {
-            "doc": "Get the ports for delays.",
+        "get_control_active": {
+            "doc": "Get map of control hardware to enabled state",
             "request": [],
             "response": {
                 "type": "map",
-                "values": [
-                    "int",
-                    "string"
-                ]
+                "values": "boolean"
+            }
+        },
+        "get_control_positions": {
+            "doc": "Get underlying control positions, provides a mapping of names to positions, in native units.",
+            "request": [],
+            "response": {
+                "type": "map",
+                "values": "double"
+            }
+        },
+        "get_control_tunes": {
+            "doc": "Get cached control tunes, provides a mapping of names to tunes, in native units.",
+            "request": [],
+            "response": {
+                "type": "map",
+                "values": "string"
             }
         },
         "get_destination": {
@@ -232,41 +225,16 @@
                 "type": "array"
             }
         },
+        "get_offset": {
+            "doc": "Get the applied offset in ps",
+            "request": [],
+            "response": "double"
+        },
         "get_position": {
             "doc": "Get current daemon position.",
             "origin": "has-position",
             "request": [],
             "response": "double"
-        },
-        "get_setable_names": {
-            "doc": "Get list of setables",
-            "request": [],
-            "response": {
-                "items": "string",
-                "type": "array"
-            }
-        },
-        "get_setable_positions": {
-            "doc": "Get underlying setables, provides a mapping of names to positions, in native units.",
-            "request": [],
-            "response": {
-                "type": "map",
-                "values": [
-                    "double",
-                    "string"
-                ]
-            }
-        },
-        "get_setable_yaq_params": {
-            "doc": "Get the ports for setables.",
-            "request": [],
-            "response": {
-                "type": "map",
-                "values": [
-                    "int",
-                    "string"
-                ]
-            }
         },
         "get_state": {
             "doc": "Get version of the running daemon",
@@ -283,23 +251,15 @@
                 "string"
             ]
         },
+        "get_zero_position": {
+            "doc": "Get the zero position in underlying daemon units",
+            "request": [],
+            "response": "double"
+        },
         "home": {
             "doc": "Initiates the homing procedure.\nThe daemon will report as busy during the homing procedure.\n After the homing procedure is complete, the daemon will return to the current destination.\n",
             "origin": "is-homeable",
             "request": [],
-            "response": "null"
-        },
-        "home_setables": {
-            "doc": "Home underlying setables, accepts a list of names to home.",
-            "request": [
-                {
-                    "name": "setables",
-                    "type": {
-                        "items": "string",
-                        "type": "array"
-                    }
-                }
-            ],
             "response": "null"
         },
         "id": {
@@ -325,15 +285,44 @@
             ],
             "response": "boolean"
         },
-        "set_arrangement": {
-            "doc": "Get the currently in use arrangement name",
+        "set_control_active": {
+            "doc": "Set the cached value of the control hardware, causes delay to recompute its offset and adjust appropriately",
             "request": [
                 {
-                    "name": "arrangement",
-                    "type": [
-                        "null",
-                        "string"
-                    ]
+                    "name": "control",
+                    "type": "string"
+                },
+                {
+                    "name": "active",
+                    "type": "boolean"
+                }
+            ],
+            "response": "null"
+        },
+        "set_control_position": {
+            "doc": "Set the cached value of the control hardware, causes delay to recompute its offset and adjust appropriately",
+            "request": [
+                {
+                    "name": "control",
+                    "type": "string"
+                },
+                {
+                    "name": "position",
+                    "type": "double"
+                }
+            ],
+            "response": "null"
+        },
+        "set_control_tune": {
+            "doc": "Set the cached value of the control hardware tune, causes delay to recompute its offset and adjust appropriately",
+            "request": [
+                {
+                    "name": "control",
+                    "type": "string"
+                },
+                {
+                    "name": "tune",
+                    "type": "string"
                 }
             ],
             "response": "null"
@@ -359,23 +348,6 @@
             ],
             "response": "null"
         },
-        "set_position_except": {
-            "doc": "Set the position, but ignore some setables",
-            "request": [
-                {
-                    "name": "position",
-                    "type": "double"
-                },
-                {
-                    "name": "exceptions",
-                    "type": {
-                        "items": "string",
-                        "type": "array"
-                    }
-                }
-            ],
-            "response": "null"
-        },
         "set_relative": {
             "doc": "Give the daemon a new destination relative to its current position. Daemon will immediately begin motion towards new destination. Returns new destination.",
             "origin": "has-position",
@@ -387,18 +359,12 @@
             ],
             "response": "double"
         },
-        "set_setable_positions": {
-            "doc": "Set underlying setables, accepts a mapping of names to positions, in native units.",
+        "set_zero_position": {
+            "doc": "Set the zero position in underlying daemon units",
             "request": [
                 {
-                    "name": "setables",
-                    "type": {
-                        "type": "map",
-                        "values": [
-                            "double",
-                            "string"
-                        ]
-                    }
+                    "name": "position",
+                    "type": "double"
                 }
             ],
             "response": "null"
@@ -416,16 +382,26 @@
             "response": "null"
         }
     },
-    "protocol": "attune",
+    "protocol": "attune-delay",
     "requires": [],
     "state": {
-        "arrangement": {
-            "default": null,
-            "doc": "Currently selected arrangement. If null, use whichever arrangment fits the requested position, and error if there are multiple",
-            "type": [
-                "null",
-                "string"
-            ]
+        "control_active": {
+            "default": {},
+            "doc": "Weather or not a particular control is active",
+            "type": "map",
+            "values": "boolean"
+        },
+        "control_position": {
+            "default": {},
+            "doc": "Cached position of the control hardware",
+            "type": "map",
+            "values": "double"
+        },
+        "control_tunes": {
+            "default": {},
+            "doc": "Cached tune of the control hardware",
+            "type": "map",
+            "values": "string"
         },
         "destination": {
             "default": NaN,
@@ -441,9 +417,19 @@
             "origin": "has-limits",
             "type": "array"
         },
+        "offset": {
+            "default": 0.0,
+            "doc": "Currently applied offset due to cosetting",
+            "type": "double"
+        },
         "position": {
             "default": NaN,
             "origin": "has-position",
+            "type": "double"
+        },
+        "zero_position": {
+            "default": 0.0,
+            "doc": "Position in underlying stage units that represents the zero position",
             "type": "double"
         }
     },

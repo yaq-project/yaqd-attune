@@ -1,7 +1,7 @@
 __all__ = ["Attune"]
 
 import asyncio
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Union, Optional
 
 import attune  # type: ignore
 import yaqc  # type: ignore
@@ -22,6 +22,16 @@ class Attune(HasLimits, IsHomeable, HasPosition, IsDaemon):
             else:
                 host, port = v.split(":")
                 self._setables[k] = yaqc.Client(port=int(port), host=host)
+
+        self._delays = dict()
+        for k, v in config["delays"].items():
+            if isinstance(v, int):
+                self._delays[k] = yaqc.Client(v)
+            else:
+                host, port = v.split(":")
+                self._delays[k] = yaqc.Client(port=int(port), host=host)
+            self._delays[k].set_control_tune(self.name, self._state["arrangement"])
+            self._delays[k].set_control_position(self.name, self._state["position"])
 
         self._set_limits()
         self._units = "nm"
@@ -44,6 +54,8 @@ class Attune(HasLimits, IsHomeable, HasPosition, IsDaemon):
                 pass  # discrete with no default, leave it where it is
             else:
                 self._setables[name].set_position(set_pos)
+        for delay in self._delays.values():
+            delay.set_control_position(self.name, position)
         self._state["position"] = position
 
     def get_instrument(self):
@@ -64,6 +76,8 @@ class Attune(HasLimits, IsHomeable, HasPosition, IsDaemon):
         self._busy = True
         self._state["arrangement"] = arrangement
         self._set_limits()
+        for delay in self._delays.values():
+            delay.set_control_tune(self.name, arrangement)
 
     def get_all_arrangements(self):
         return list(self._instrument.arrangements.keys())
@@ -73,6 +87,12 @@ class Attune(HasLimits, IsHomeable, HasPosition, IsDaemon):
 
     def get_setable_names(self):
         return list(self._setables.keys())
+
+    def get_delay_yaq_params(self):
+        return self._config["delays"]
+
+    def get_delay_names(self):
+        return list(self._delays.keys())
 
     def set_setable_positions(self, setables):
         self._busy = True
@@ -111,7 +131,9 @@ class Attune(HasLimits, IsHomeable, HasPosition, IsDaemon):
     async def update_state(self):
         """Continually monitor and update the current daemon state."""
         while True:
-            self._busy = any(sa.busy() for sa in self._setables.values())
+            self._busy = any(sa.busy() for sa in self._setables.values()) or any(
+                de.busy() for de in self._delays.values()
+            )
             if self._busy:
                 await asyncio.sleep(0.1)
             else:

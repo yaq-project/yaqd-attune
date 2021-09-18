@@ -1,0 +1,166 @@
+protocol = "attune-delay"
+doc="yaq daemon representing an attune delay"
+traits=["has-limits", "is-homeable", "is-daemon"]
+
+[links]
+source = "https://gitlab.com/yaq/yaqd-attune"
+bugtracker = "https://gitlab.com/yaq/yaqd-attune/-/issues"
+
+[installation]
+PyPI = "https://pypi.org/project/yaqd-attune"
+
+[[types]]
+type="record"
+name="Transition"
+fields=[{name="type", type="string"}]
+
+[[types]]
+type="record"
+name="Setable"
+fields=[{name="name", type="string"}]
+
+[[types]]
+type="record"
+name="Tune"
+[[types.fields]]
+name="independent"
+type={type="array", items="double"}
+[[types.fields]]
+name="dependent"
+type={type="array", items="double"}
+
+[[types]]
+type="record"
+name="DiscreteTune"
+[[types.fields]]
+name="ranges"
+type={type="map", values={type="array", items="double"}}
+[[types.fields]]
+name="default"
+type = ["null", "string"]
+
+[[types]]
+type="record"
+name="Arrangement"
+[[types.fields]]
+name="name"
+type="string"
+[[types.fields]]
+name="tunes"
+type={type="map", values=["Tune", "DiscreteTune"]}
+
+[[types]]
+type="record"
+name="Instrument"
+[[types.fields]]
+name="name"
+type="string"
+[[types.fields]]
+name="arrangements"
+type={type="map", values="Arrangement"}
+[[types.fields]]
+name="setables"
+type={type="map", values="Setable"}
+[[types.fields]]
+name="transition"
+type="Transition"
+
+[config]
+wrapped_daemon.type = ["int", "string"]
+wrapped_daemon.doc = "port or host:port string of the wrapped delay stage"
+
+factor.type = "int"
+factor.doc = "multiplier of the speed of light, use negative value to invert motion relative to the zero position"
+factor.default = 2
+
+[state]
+offset.type = "double"
+offset.doc = "Currently applied offset due to cosetting"
+offset.default = 0.0
+
+zero_position.type = "double"
+zero_position.doc = "Position in underlying stage units that represents the zero position"
+zero_position.default = 0.0
+
+control_active.type = "map"
+control_active.values = "boolean"
+control_active.doc = "Weather or not a particular control is active"
+control_active.default = {}
+
+control_position.type = "map"
+control_position.values = "double"
+control_position.doc = "Cached position of the control hardware"
+control_position.default = {}
+
+control_tunes.type = "map"
+control_tunes.values = "string"
+control_tunes.doc = "Cached tune of the control hardware"
+control_tunes.default = {}
+
+[messages]
+
+[messages.get_instrument]
+response = "Instrument"
+doc = "Get the currently in use instrument object"
+
+[messages.set_instrument]
+request = [{name="instrument", type="Instrument"}]
+doc = "Set the currently in use instrument object. Also triggers a restart"
+
+[messages.set_control_position]
+request = [{name="control", type="string"}, {name="position", type="double"}]
+doc = "Set the cached value of the control hardware, causes delay to recompute its offset and adjust appropriately"
+
+[messages.get_control_positions]
+response = {type="map", values="double"}
+doc = "Get underlying control positions, provides a mapping of names to positions, in native units."
+
+[messages.set_control_tune]
+request = [{name="control", type="string"}, {name="tune", type="string"}]
+doc = "Set the cached value of the control hardware tune, causes delay to recompute its offset and adjust appropriately"
+
+[messages.get_control_tunes]
+response = {type="map", values="string"}
+doc = "Get cached control tunes, provides a mapping of names to tunes, in native units."
+
+
+[messages.set_control_active]
+request = [{name="control", type="string"}, {name="active", type="boolean"}]
+doc = "Set the cached value of the control hardware, causes delay to recompute its offset and adjust appropriately"
+
+[messages.get_control_active]
+response = {type="map", values="boolean"}
+doc = "Get map of control hardware to enabled state"
+
+[messages.set_zero_position]
+request = [{name="position", type="double"}]
+doc = "Set the zero position in underlying daemon units"
+
+[messages.get_zero_position]
+response = "double"
+doc = "Get the zero position in underlying daemon units"
+
+[messages.get_offset]
+response = "double"
+doc = "Get the applied offset in ps"
+
+[fields]
+
+[fields.zero_position]
+type = "record"
+name = "field"
+[fields.zero_position.fields]
+getter = "get_zero_position"
+setter = "set_zero_position"
+type = "double"
+kind = "normal"
+dynamic = true
+
+[fields.offset]
+type = "record"
+name = "field"
+[fields.offset.fields]
+getter = "get_offset"
+type = "double"
+kind = "normal"
+dynamic = true
