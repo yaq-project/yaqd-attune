@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Fixed
+- Allow for `null` to be passed as the control tune, disables offset from that control.
+
 ## [2021.9.0]
 
 ### Fixed
