@@ -93,7 +93,7 @@ control_position.doc = "Cached position of the control hardware"
 control_position.default = {}
 
 control_tunes.type = "map"
-control_tunes.values = "string"
+control_tunes.values = ["null", "string"]
 control_tunes.doc = "Cached tune of the control hardware"
 control_tunes.default = {}
 
@@ -116,11 +116,11 @@ response = {type="map", values="double"}
 doc = "Get underlying control positions, provides a mapping of names to positions, in native units."
 
 [messages.set_control_tune]
-request = [{name="control", type="string"}, {name="tune", type="string"}]
+request = [{name="control", type="string"}, {name="tune", type=["null", "string"]}]
 doc = "Set the cached value of the control hardware tune, causes delay to recompute its offset and adjust appropriately"
 
 [messages.get_control_tunes]
-response = {type="map", values="string"}
+response = {type="map", values=["null", "string"]}
 doc = "Get cached control tunes, provides a mapping of names to tunes, in native units."
 
 

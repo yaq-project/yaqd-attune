@@ -72,7 +72,7 @@ class AttuneDelay(HasLimits, IsHomeable, HasPosition, IsDaemon):
     def get_control_positions(self):
         return self._state["control_position"]
 
-    def set_control_tune(self, control: str, tune: float):
+    def set_control_tune(self, control: str, tune: Union[None, str]):
         self._state["control_tunes"][control] = tune
         if self._state["control_active"].get(control):
             self.set_position(self._state["destination"])

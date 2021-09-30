@@ -202,7 +202,10 @@
             "request": [],
             "response": {
                 "type": "map",
-                "values": "string"
+                "values": [
+                    "null",
+                    "string"
+                ]
             }
         },
         "get_destination": {
@@ -322,7 +325,10 @@
                 },
                 {
                     "name": "tune",
-                    "type": "string"
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 }
             ],
             "response": "null"
@@ -401,7 +407,10 @@
             "default": {},
             "doc": "Cached tune of the control hardware",
             "type": "map",
-            "values": "string"
+            "values": [
+                "null",
+                "string"
+            ]
         },
         "destination": {
             "default": NaN,
