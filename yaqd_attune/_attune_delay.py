@@ -137,3 +137,9 @@ class AttuneDelay(HasLimits, IsHomeable, HasPosition, IsDaemon):
 
     def get_zero_position(self):
         return self._state["zero_position"]
+
+    def get_zero_position_units(self):
+        return self._wrapped_daemon.get_units()
+
+    def get_zero_position_limits(self):
+        return self._wrapped_daemon.get_limits()

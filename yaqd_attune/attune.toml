@@ -144,15 +144,12 @@ doc = "Home underlying setables, accepts a list of names to home."
 name = "setables"
 type = {type="array", items="string"}
 
-[fields]
+[properties]
 
-[fields.arrangement]
-type = "record"
-name = "field"
-[fields.arrangement.fields]
+[properties.arrangement]
 getter = "get_arrangement"
-options_getter = "get_all_arrangements"
 setter = "set_arrangement"
-dynamic = true
-kind = "hinted"
+options_getter = "get_all_arrangements"
+control_kind = "hinted"
+record_kind = "metadata"
 type = "string"
