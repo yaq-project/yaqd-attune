@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- support for yaqc-qtpy entry point (currently placeholder)
+
 ### Changed
 - Convert YEP-111 fields into properties, including additional getters
 
