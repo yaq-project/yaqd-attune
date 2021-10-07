@@ -97,64 +97,6 @@
         }
     },
     "doc": "yaq daemon representing an attune delay",
-    "fields": {
-        "destination": {
-            "fields": {
-                "dynamic": true,
-                "getter": "get_destination",
-                "kind": "normal",
-                "type": "double"
-            },
-            "name": "field",
-            "type": "record"
-        },
-        "limits": {
-            "fields": {
-                "dynamic": true,
-                "getter": "get_limits",
-                "kind": "normal",
-                "type": {
-                    "items": "double",
-                    "type": "array"
-                }
-            },
-            "name": "field",
-            "type": "record"
-        },
-        "offset": {
-            "fields": {
-                "dynamic": true,
-                "getter": "get_offset",
-                "kind": "normal",
-                "type": "double"
-            },
-            "name": "field",
-            "type": "record"
-        },
-        "origin": "has-position",
-        "position": {
-            "fields": {
-                "dynamic": true,
-                "getter": "get_position",
-                "kind": "hinted",
-                "setter": "set_position",
-                "type": "double"
-            },
-            "name": "field",
-            "type": "record"
-        },
-        "zero_position": {
-            "fields": {
-                "dynamic": true,
-                "getter": "get_zero_position",
-                "kind": "normal",
-                "setter": "set_zero_position",
-                "type": "double"
-            },
-            "name": "field",
-            "type": "record"
-        }
-    },
     "installation": {
         "PyPI": "https://pypi.org/project/yaqd-attune"
     },
@@ -246,7 +188,7 @@
             "response": "string"
         },
         "get_units": {
-            "doc": "Get units of daemon. These units apply to the position and destination fields.",
+            "doc": "Get units of daemon. These units apply to the position and destination properties.",
             "origin": "has-position",
             "request": [],
             "response": [
@@ -258,6 +200,19 @@
             "doc": "Get the zero position in underlying daemon units",
             "request": [],
             "response": "double"
+        },
+        "get_zero_position_limits": {
+            "doc": "Get the zero position underlying daemon limits",
+            "request": [],
+            "response": {
+                "items": "double",
+                "type": "array"
+            }
+        },
+        "get_zero_position_units": {
+            "doc": "Get the zero position underlying daemon units",
+            "request": [],
+            "response": "string"
         },
         "home": {
             "doc": "Initiates the homing procedure.\nThe daemon will report as busy during the homing procedure.\n After the homing procedure is complete, the daemon will return to the current destination.\n",
@@ -386,6 +341,52 @@
                 }
             ],
             "response": "null"
+        }
+    },
+    "properties": {
+        "destination": {
+            "control_kind": "normal",
+            "dynamic": true,
+            "getter": "get_destination",
+            "limits_getter": null,
+            "options_getter": null,
+            "record_kind": "data",
+            "setter": null,
+            "type": "double",
+            "units_getter": "get_units"
+        },
+        "offset": {
+            "control_kind": "normal",
+            "dynamic": true,
+            "getter": "get_offset",
+            "limits_getter": null,
+            "options_getter": null,
+            "record_kind": "data",
+            "setter": null,
+            "type": "double",
+            "units_getter": "get_units"
+        },
+        "position": {
+            "control_kind": "hinted",
+            "dynamic": true,
+            "getter": "get_position",
+            "limits_getter": "get_limits",
+            "options_getter": null,
+            "record_kind": "data",
+            "setter": "set_position",
+            "type": "double",
+            "units_getter": "get_units"
+        },
+        "zero_position": {
+            "control_kind": "normal",
+            "dynamic": true,
+            "getter": "get_zero_position",
+            "limits_getter": "get_zero_position_limits",
+            "options_getter": null,
+            "record_kind": "metadata",
+            "setter": "set_zero_position",
+            "type": "double",
+            "units_getter": "get_zero_position_units"
         }
     },
     "protocol": "attune-delay",

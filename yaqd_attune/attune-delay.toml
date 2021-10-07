@@ -140,27 +140,33 @@ doc = "Set the zero position in underlying daemon units"
 response = "double"
 doc = "Get the zero position in underlying daemon units"
 
+[messages.get_zero_position_units]
+response = "string"
+doc = "Get the zero position underlying daemon units"
+
+[messages.get_zero_position_limits]
+response = {"type"="array", "items"="double"}
+doc = "Get the zero position underlying daemon limits"
+
 [messages.get_offset]
 response = "double"
 doc = "Get the applied offset in ps"
 
-[fields]
+[properties]
 
-[fields.zero_position]
-type = "record"
-name = "field"
-[fields.zero_position.fields]
+[properties.zero_position]
 getter = "get_zero_position"
 setter = "set_zero_position"
+limits_getter = "get_zero_position_limits"
+units_getter = "get_zero_position_units"
 type = "double"
-kind = "normal"
-dynamic = true
+control_kind = "normal"
+record_kind = "metadata"
 
-[fields.offset]
-type = "record"
-name = "field"
-[fields.offset.fields]
+[properties.offset]
 getter = "get_offset"
+units_getter = "get_units"
 type = "double"
 kind = "normal"
-dynamic = true
+control_kind = "normal"
+record_kind = "data"

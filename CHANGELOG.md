@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Changed
+- Convert YEP-111 fields into properties, including additional getters
+
 ### Fixed
 - Allow for `null` to be passed as the control tune, disables offset from that control.
 
