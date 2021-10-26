@@ -3,8 +3,7 @@ from qtpy import QtWidgets, QtCore  # type: ignore
 import yaqc_qtpy  # type: ignore
 
 
-class AttuneGUI(QtWidgets.QWidget):
-
+class AttuneDelayGUI(QtWidgets.QWidget):
     def __init__(self, client: yaqc_qtpy.QClient):
         super().__init__()
         self._create_main_frame()
