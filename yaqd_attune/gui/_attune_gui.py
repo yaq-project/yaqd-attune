@@ -1,10 +1,10 @@
 from qtpy import QtWidgets, QtCore  # type: ignore
-import qtypes
+import qtypes  # type: ignore
 
 import yaqc_qtpy  # type: ignore
 from yaqc_qtpy import _plot  # noqa
-import WrightTools as wt
-import attune
+import WrightTools as wt  # type: ignore
+import attune  # type: ignore
 
 
 class AttuneGUI(QtWidgets.QWidget):
