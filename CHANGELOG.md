@@ -5,10 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+##[2021.12.0]
+
+### Added
+- Actual yaqc-qtpy entry point guis for opa and delay
+
 ## [2021.10.0]
 
 ### Added
 - support for yaqc-qtpy entry point (currently placeholder)
+- yaqd-attune-delay daemon for spectral delay correction
 
 ### Changed
 - Convert YEP-111 fields into properties, including additional getters
@@ -43,7 +49,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - initial release
 
-[Unreleased]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.10.0...main
+[Unreleased]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.12.0...master
+[2021.10.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.10.0...v2021.12.0
 [2021.10.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.9.0...v2021.10.0
 [2021.9.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.3.0...v2021.9.0
 [2021.3.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.2.0...v2021.3.0
