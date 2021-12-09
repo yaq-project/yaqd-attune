@@ -7,10 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ##[2021.12.0]
 
+### Added
+- Actual yaqc-qtpy entry point guis for opa and delay
+
 ## [2021.10.0]
 
 ### Added
 - support for yaqc-qtpy entry point (currently placeholder)
+- yaqd-attune-delay daemon for spectral delay correction
 
 ### Changed
 - Convert YEP-111 fields into properties, including additional getters
