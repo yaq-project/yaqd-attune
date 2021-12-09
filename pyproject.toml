@@ -36,6 +36,9 @@ yaqd-attune-delay  = "yaqd_attune._attune_delay:AttuneDelay.main"
 [tool.flit.entrypoints."yaqc_qtpy.main.attune"]
 attune = "yaqd_attune.gui._attune_gui:AttuneGUI"
 
+[tool.flit.entrypoints."yaqc_qtpy.main.attune_delay"]
+attune-delay = "yaqd_attune.gui._attune_delay_gui:AttuneDelayGUI"
+
 [tool.black]
 line-length = 99
 target-version = ['py37', 'py38']
