@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- Methods to standardize access to dependent hardware
+
 ##[2021.12.0]
 
 ### Added

@@ -144,6 +144,10 @@ doc = "Home underlying setables, accepts a list of names to home."
 name = "setables"
 type = {type="array", items="string"}
 
+[messages.get_dependent_hardware]
+response = {type="map", values="string"}
+doc = "Get mapping of name to host:port string. 'localhost' should be replaced on the client side with the host for this daemon."
+
 [properties]
 
 [properties.arrangement]

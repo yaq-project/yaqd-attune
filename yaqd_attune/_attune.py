@@ -117,6 +117,19 @@ class Attune(HasLimits, IsHomeable, HasPosition, IsDaemon):
         self._busy = True
         self.home_setables(self._setables.keys())
 
+    def get_dependent_hardware(self):
+        ret = {
+            k: v if isinstance(v, str) else f"localhost:{v}"
+            for k, v in self.get_setable_yaq_params().items()
+        }
+        ret.update(
+            **{
+                k: v if isinstance(v, str) else f"localhost:{v}"
+                for k, v in self.get_delay_yaq_params().items()
+            }
+        )
+        return ret
+
     def _set_limits(self):
         if self._state["arrangement"] is None:
             min_ = float(min(x.ind_min for x in self._instrument.arrangements.values()))
