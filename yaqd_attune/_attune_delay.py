@@ -91,6 +91,9 @@ class AttuneDelay(HasLimits, IsHomeable, HasPosition, IsDaemon):
         self._busy = True
         self._wrapped_daemon.home()
 
+    def get_dependent_hardware(self):
+        return {"stage": f"{self._wrapped_daemon._host}:{self._wrapped_daemon._port}"}
+
     def _set_limits(self):
         min_, max_ = self._wrapped_daemon.get_limits()
         min_ = self._to_ps(min_)
