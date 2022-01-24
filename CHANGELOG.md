@@ -5,10 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [2022.1.0]
+
 ### Added
 - Methods to standardize access to dependent hardware
 
-##[2021.12.0]
+## [2021.12.0]
 
 ### Added
 - Actual yaqc-qtpy entry point guis for opa and delay
@@ -52,8 +54,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - initial release
 
-[Unreleased]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.12.0...master
-[2021.10.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.10.0...v2021.12.0
+[Unreleased]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2022.1.0...master
+[2022.1.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.12.0...v2022.1.0
+[2021.12.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.10.0...v2021.12.0
 [2021.10.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.9.0...v2021.10.0
 [2021.9.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.3.0...v2021.9.0
 [2021.3.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.2.0...v2021.3.0
