@@ -99,9 +99,9 @@ class AttuneDelay(HasLimits, IsHomeable, HasPosition, IsDaemon):
         min_ = self._to_ps(min_)
         max_ = self._to_ps(max_)
         if min_ < max_:
-            self._state["hw_limits"] = (min_, max_)
+            self._state["hw_limits"] = [min_, max_]
         else:
-            self._state["hw_limits"] = (max_, min_)
+            self._state["hw_limits"] = [max_, min_]
 
     def _to_ps(self, mm):
         mm -= self._state["zero_position"]
@@ -136,7 +136,9 @@ class AttuneDelay(HasLimits, IsHomeable, HasPosition, IsDaemon):
                 )
         attune.store(self._instrument)
 
-        self.set_position(self.get_destination())
+        self._state["position"] = self._to_ps(self._wrapped_daemon.get_position())
+        self._state["destination"] = self._state["position"]
+        self._set_limits()
 
     def get_zero_position(self):
         return self._state["zero_position"]
