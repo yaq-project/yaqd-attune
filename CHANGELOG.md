@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Changed
+- No longer reset to destination when zero position is set, instead update current state to reflect change without changing underlying motor position.
+
+### Fixed
+- Avoid writing tuple `hw_limits` to state, which prevents state file from writing
+
 ## [2022.1.0]
 
 ### Added
