@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [2022.6.0]
+
+### Changed
+- migrated to github.com
+
 ## [2022.3.0]
 
 ### Changed
@@ -62,12 +67,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - initial release
 
-[Unreleased]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2022.3.0...master
-[2022.3.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2022.1.0...v2022.3.0
-[2022.1.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.12.0...v2022.1.0
-[2021.12.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.10.0...v2021.12.0
-[2021.10.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.9.0...v2021.10.0
-[2021.9.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.3.0...v2021.9.0
-[2021.3.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.2.0...v2021.3.0
-[2021.2.0]: https://gitlab.com/yaq/yaqd-attune/-/compare/v2021.1.0...v2021.2.0
-[2021.1.0]: https://gitlab.com/yaq/yaqd-attune/-/tags/v2021.1.0
+[Unreleased]: https://github.com/yaq-project/yaqd-attune/compare/v2022.6.0...HEAD
+[2022.6.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.3.0...v2022.6.0
+[2022.3.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.1.0...v2022.3.0
+[2022.1.0]: https://github.com/yaq-project/yaqd-attune/compare/v2021.12.0...v2022.1.0
+[2021.12.0]: https://github.com/yaq-project/yaqd-attune/compare/v2021.10.0...v2021.12.0
+[2021.10.0]: https://github.com/yaq-project/yaqd-attune/compare/v2021.9.0...v2021.10.0
+[2021.9.0]: https://github.com/yaq-project/yaqd-attune/compare/v2021.3.0...v2021.9.0
+[2021.3.0]: https://github.com/yaq-project/yaqd-attune/compare/v2021.2.0...v2021.3.0
+[2021.2.0]: https://github.com/yaq-project/yaqd-attune/compare/v2021.1.0...v2021.2.0
+[2021.1.0]: https://github.com/yaq-project/yaqd-attune/releases/tag/v2021.1.0
