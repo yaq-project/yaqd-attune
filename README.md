@@ -13,3 +13,7 @@ This package contains the following daemon(s):
 
 - https://yaq.fyi/daemons/attune
 - https://yaq.fyi/daemons/attune-delay
+
+## maintainers
+
+[Dan Kohler](https://github.com/ddkohler)
