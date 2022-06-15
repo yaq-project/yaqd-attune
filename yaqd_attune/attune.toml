@@ -3,8 +3,8 @@ doc="yaq daemon representing an attune instrument"
 traits=["has-limits", "is-homeable", "is-daemon"]
 
 [links]
-source = "https://gitlab.com/yaq/yaqd-attune"
-bugtracker = "https://gitlab.com/yaq/yaqd-attune/-/issues"
+source = "https://gitlab.com/yaq-project/yaqd-attune"
+bugtracker = "https://gitlab.com/yaq-project/yaqd-attune/issues"
 
 [installation]
 PyPI = "https://pypi.org/project/yaqd-attune"
