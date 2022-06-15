@@ -106,7 +106,7 @@
         "PyPI": "https://pypi.org/project/yaqd-attune"
     },
     "links": {
-        "bugtracker": "https://github.com/yaq-prject/yaqd-attune/issues",
+        "bugtracker": "https://github.com/yaq-project/yaqd-attune/issues",
         "source": "https://github.com/yaq-project/yaqd-attune"
     },
     "messages": {
