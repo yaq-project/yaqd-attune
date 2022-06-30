@@ -21,9 +21,7 @@ class AttuneGUI(QtWidgets.QSplitter):
         self.tune_enum = qtypes.Enum("Tune")
         self.instrument_item = qtypes.Null("instrument")
         allowed_values = ["wn"] + list(wt.units.get_valid_conversions("wn"))
-        self.plot_units = qtypes.Enum(
-            "Units", value={"value": self.units, "allowed": allowed_values}
-        )
+        self.plot_units = qtypes.Enum("Units", value=self.units, allowed=allowed_values)
         self.qclient = qclient
         self.qclient.get_instrument.finished.connect(self.on_get_instrument)
         self.qclient.get_instrument()
@@ -45,39 +43,34 @@ class AttuneGUI(QtWidgets.QSplitter):
         display_layout.addWidget(self.plot_widget)
 
         # right hand tree
-        self._tree_widget = qtypes.TreeWidget(width=500)
+        self._root_item = qtypes.Null()
 
         # plot control
         display_item = qtypes.Null("Display")
-        self._tree_widget.append(display_item)
-        self.tune_enum.updated.connect(self.update_plot)
+        self._root_item.append(display_item)
+        self.tune_enum.updated_connect(self.update_plot)
         display_item.append(self.tune_enum)
-        self.plot_units.updated.connect(self.update_plot)
+        self.plot_units.updated_connect(self.update_plot)
         display_item.append(self.plot_units)
-        display_item.setExpanded(True)
 
         # id
         id_item = qtypes.Null("id")
-        self._tree_widget.append(id_item)
+        self._root_item.append(id_item)
         for key, value in self.qclient.id().items():
-            id_item.append(qtypes.String(label=key, disabled=True, value={"value": value}))
-        id_item.setExpanded(True)
+            id_item.append(qtypes.String(label=key, disabled=True, value=value))
 
         # traits
         traits_item = qtypes.Null("traits")
-        self._tree_widget.append(traits_item)
+        self._root_item.append(traits_item)
         for trait in yaq_traits.__traits__.traits.keys():
             traits_item.append(
-                qtypes.Bool(
-                    label=trait, disabled=True, value={"value": trait in self.qclient.traits}
-                )
+                qtypes.Bool(label=trait, disabled=True, value=trait in self.qclient.traits)
             )
 
         # properties
         properties_item = qtypes.Null("properties")
-        self._tree_widget.append(properties_item)
+        self._root_item.append(properties_item)
         qtype_items.append_properties(self.qclient, properties_item)
-        properties_item.setExpanded(True)
 
         # is-homeable
         if "is-homeable" in self.qclient.traits:
@@ -85,20 +78,21 @@ class AttuneGUI(QtWidgets.QSplitter):
             def on_clicked(_, qclient):
                 qclient.home()
 
-            home_button = qtypes.Button("is-homeable", value={"text": "home"})
-            self._tree_widget.append(home_button)
-            home_button.updated.connect(partial(on_clicked, qclient=self.qclient))
+            home_button = qtypes.Button("is-homeable", text="home")
+            self._root_item.append(home_button)
+            home_button.updated_connect(partial(on_clicked, qclient=self.qclient))
 
         # instrument preview
-        self._tree_widget.append(self.instrument_item)
+        self._root_item.append(self.instrument_item)
 
+        self._tree_widget = qtypes.TreeWidget(self._root_item)
         self._tree_widget.resizeColumnToContents(0)
         self.addWidget(self._tree_widget)
 
         self.update()
         self.update_plot()
 
-    def update_plot(self):
+    def update_plot(self, val=None):
         if not hasattr(self, "instrument"):
             return
         arr = self.arr
@@ -131,7 +125,7 @@ class AttuneGUI(QtWidgets.QSplitter):
         # TODO empty instrument item
         for name, arr in self.instrument.arrangements.items():
             arr_item = qtypes.String(
-                name, value={"value": f"{arr.ind_min:0.3f} - {arr.ind_max:0.3f} nm"}, disabled=True
+                name, value=f"{arr.ind_min:0.3f} - {arr.ind_max:0.3f} nm", disabled=True
             )
             self.instrument_item.append(arr_item)
             for tune in arr.tunes.keys():
