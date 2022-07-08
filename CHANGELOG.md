@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Changed
+- Update to new version of qtypes for guis
+
 ## [2022.6.0]
 
 ### Changed

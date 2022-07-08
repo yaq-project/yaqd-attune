@@ -1,4 +1,5 @@
 from functools import partial
+from typing import Dict
 
 from qtpy import QtWidgets, QtCore  # type: ignore
 import qtypes  # type: ignore
@@ -19,18 +20,17 @@ class AttuneDelayGUI(QtWidgets.QSplitter):
         self.plot_widget = yaqc_qtpy._plot.Plot1D(yAutoRange=True)
         # self.plot_v_line = self.plot_widget.add_infinite_line(angle=90, hide=False)
         self.arrangement_enum = qtypes.Enum("Arrangement")
-        self.arrangement_enum.updated.connect(self.on_arrangement_updated)
+        self.arrangement_enum.updated_connect(self.on_arrangement_updated)
         self.tune_enum = qtypes.Enum("Tune")
         self.instrument_item = qtypes.Null("instrument")
         allowed_values = ["wn"] + list(wt.units.get_valid_conversions("wn"))
-        self.plot_units = qtypes.Enum(
-            "Units", value={"value": self.units, "allowed": allowed_values}
-        )
+        self.plot_units = qtypes.Enum("Units", value=self.units, allowed=allowed_values)
         self.qclient = qclient
         self.qclient.get_instrument.finished.connect(self.on_get_instrument)
         self.qclient.get_instrument()
         self.qclient.get_control_active.finished.connect(self.on_get_control_active)
         self._create_main_frame()
+        self.use_bools: Dict[str, bool] = {}
 
         self.poll = QtCore.QTimer()
         self.poll.timeout.connect(self.qclient.get_control_active)
@@ -50,40 +50,35 @@ class AttuneDelayGUI(QtWidgets.QSplitter):
         display_layout.addWidget(self.plot_widget)
 
         # right hand tree
-        self._tree_widget = qtypes.TreeWidget(width=500)
+        self._root_item = qtypes.Null()
 
         # plot control
         display_item = qtypes.Null("Display")
-        self._tree_widget.append(display_item)
+        self._root_item.append(display_item)
         display_item.append(self.arrangement_enum)
-        self.tune_enum.updated.connect(self.update_plot)
+        self.tune_enum.updated_connect(self.update_plot)
         display_item.append(self.tune_enum)
-        self.plot_units.updated.connect(self.update_plot)
+        self.plot_units.updated_connect(self.update_plot)
         display_item.append(self.plot_units)
-        display_item.setExpanded(True)
 
         # id
         id_item = qtypes.Null("id")
-        self._tree_widget.append(id_item)
+        self._root_item.append(id_item)
         for key, value in self.qclient.id().items():
-            id_item.append(qtypes.String(label=key, disabled=True, value={"value": value}))
-        id_item.setExpanded(True)
+            id_item.append(qtypes.String(label=key, disabled=True, value=value))
 
         # traits
         traits_item = qtypes.Null("traits")
-        self._tree_widget.append(traits_item)
+        self._root_item.append(traits_item)
         for trait in yaq_traits.__traits__.traits.keys():
             traits_item.append(
-                qtypes.Bool(
-                    label=trait, disabled=True, value={"value": trait in self.qclient.traits}
-                )
+                qtypes.Bool(label=trait, disabled=True, value=trait in self.qclient.traits)
             )
 
         # properties
         properties_item = qtypes.Null("properties")
-        self._tree_widget.append(properties_item)
+        self._root_item.append(properties_item)
         qtype_items.append_properties(self.qclient, properties_item)
-        properties_item.setExpanded(True)
 
         # is-homeable
         if "is-homeable" in self.qclient.traits:
@@ -91,25 +86,25 @@ class AttuneDelayGUI(QtWidgets.QSplitter):
             def on_clicked(_, qclient):
                 qclient.home()
 
-            home_button = qtypes.Button("is-homeable", value={"text": "home"})
-            self._tree_widget.append(home_button)
-            home_button.updated.connect(partial(on_clicked, qclient=self.qclient))
+            home_button = qtypes.Button("is-homeable", text="home")
+            self._root_item.append(home_button)
+            home_button.updated_connect(partial(on_clicked, qclient=self.qclient))
 
         # instrument preview
-        self._tree_widget.append(self.instrument_item)
-        self.instrument_item.setExpanded(True)
+        self._root_item.append(self.instrument_item)
 
+        self._tree_widget = qtypes.TreeWidget(self._root_item)
         self._tree_widget.resizeColumnToContents(0)
         self.addWidget(self._tree_widget)
 
         self.update()
         self.update_plot()
 
-    def update_plot(self):
+    def update_plot(self, val=None):
         if not hasattr(self, "instrument"):
             return
         arr = self.arrangement_enum.get_value()
-        if arr is None:
+        if not arr:
             return
         motor_name = self.tune_enum.get_value()
         tune = self.instrument.arrangements[arr][motor_name]
@@ -135,7 +130,6 @@ class AttuneDelayGUI(QtWidgets.QSplitter):
     def on_get_instrument(self, json):
         self.instrument = attune.Instrument(**json)
         self.arrangement_enum.set({"allowed": list(self.instrument.arrangements.keys())})
-        self.use_bools = {}
         # TODO empty instrument item
         for name, arr in self.instrument.arrangements.items():
             arr_item = qtypes.Bool(name)
@@ -144,7 +138,7 @@ class AttuneDelayGUI(QtWidgets.QSplitter):
             def update_use(val, name=name):
                 self.qclient.set_control_active(name, val["value"])
 
-            arr_item.edited.connect(update_use)
+            arr_item.edited_connect(update_use)
             self.instrument_item.append(arr_item)
             for tune in arr.tunes.keys():
                 arr_item.append(qtypes.Null(tune))
@@ -152,8 +146,9 @@ class AttuneDelayGUI(QtWidgets.QSplitter):
 
     def on_arrangement_updated(self, arr):
         arr = arr["value"]
-        self.tune_enum.set({"allowed": list(self.instrument[arr].keys())})
-        self.update_plot()
+        if arr:
+            self.tune_enum.set({"allowed": list(self.instrument[arr].keys())})
+            self.update_plot()
 
     def on_get_control_active(self, active):
         for name, use in self.use_bools.items():
