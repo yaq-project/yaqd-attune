@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [2022.7.0]
+
 ### Changed
 - Update to new version of qtypes for guis
 
@@ -70,7 +72,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - initial release
 
-[Unreleased]: https://github.com/yaq-project/yaqd-attune/compare/v2022.6.0...HEAD
+[Unreleased]: https://github.com/yaq-project/yaqd-attune/compare/v2022.7.0...HEAD
+[2022.7.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.6.0...v2022.7.0
 [2022.6.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.3.0...v2022.6.0
 [2022.3.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.1.0...v2022.3.0
 [2022.1.0]: https://github.com/yaq-project/yaqd-attune/compare/v2021.12.0...v2022.1.0
