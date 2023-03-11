@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [2023.3.0]
+
+### Changed
+- enforce python <= 3.10
+- daemons officially adopt the `has-dependents` trait (no actual change in functionality)
+
 ## [2022.7.0]
 
 ### Changed
@@ -72,7 +78,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - initial release
 
-[Unreleased]: https://github.com/yaq-project/yaqd-attune/compare/v2022.7.0...HEAD
+[Unreleased]: https://github.com/yaq-project/yaqd-attune/compare/v2023.3.0...HEAD
+[2023.3.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.7.0...v2023.3.0
 [2022.7.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.6.0...v2022.7.0
 [2022.6.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.3.0...v2022.6.0
 [2022.3.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.1.0...v2022.3.0

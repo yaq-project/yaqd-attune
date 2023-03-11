@@ -9,7 +9,7 @@ author = "yaq developers"
 home-page = "https://yaq.fyi"
 description-file = "README.md"
 requires-python = ">=3.7<=3.10"
-requires = ["attune", "yaqd-core>=2020.10.1", "yaqc"]
+requires = ["attune", "yaqd-core>=2022.7.0", "yaqc"]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Science/Research",
