@@ -6,11 +6,11 @@ from typing import Dict, Any, List, Union
 import attune  # type: ignore
 import pint  # type: ignore
 import yaqc  # type: ignore
-from yaqd_core import HasLimits, IsHomeable, HasPosition, IsDaemon
+from yaqd_core import HasDependents, HasLimits, IsHomeable, HasPosition, IsDaemon
 import WrightTools as wt  # type: ignore
 
 
-class AttuneDelay(HasLimits, IsHomeable, HasPosition, IsDaemon):
+class AttuneDelay(HasDependents, HasLimits, IsHomeable, HasPosition, IsDaemon):
     _kind = "attune-delay"
 
     def __init__(self, name, config, config_filepath):
