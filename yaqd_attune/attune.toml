@@ -1,6 +1,6 @@
 protocol = "attune"
 doc="yaq daemon representing an attune instrument"
-traits=["has-limits", "is-homeable", "is-daemon"]
+traits=["has-dependents", "has-limits", "is-homeable", "is-daemon"]
 
 [links]
 source = "https://github.com/yaq-project/yaqd-attune"

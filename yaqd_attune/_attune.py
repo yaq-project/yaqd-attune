@@ -5,10 +5,10 @@ from typing import Dict, Any, List, Union, Optional
 
 import attune  # type: ignore
 import yaqc  # type: ignore
-from yaqd_core import HasLimits, IsHomeable, HasPosition, IsDaemon
+from yaqd_core import HasDependents, HasLimits, IsHomeable, HasPosition, IsDaemon
 
 
-class Attune(HasLimits, IsHomeable, HasPosition, IsDaemon):
+class Attune(HasDependents, HasLimits, IsHomeable, HasPosition, IsDaemon):
     _kind = "attune"
 
     def __init__(self, name, config, config_filepath):
