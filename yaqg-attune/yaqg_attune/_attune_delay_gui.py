@@ -72,7 +72,9 @@ class AttuneDelayGUI(QtWidgets.QSplitter):
         self._root_item.append(traits_item)
         for trait in yaq_traits.__traits__.traits.keys():
             traits_item.append(
-                qtypes.Bool(label=trait, disabled=True, value=trait in self.qclient.traits)
+                qtypes.Bool(
+                    label=trait, disabled=True, value=trait in self.qclient.traits
+                )
             )
 
         # properties
@@ -129,7 +131,9 @@ class AttuneDelayGUI(QtWidgets.QSplitter):
 
     def on_get_instrument(self, json):
         self.instrument = attune.Instrument(**json)
-        self.arrangement_enum.set({"allowed": list(self.instrument.arrangements.keys())})
+        self.arrangement_enum.set(
+            {"allowed": list(self.instrument.arrangements.keys())}
+        )
         # TODO empty instrument item
         for name, arr in self.instrument.arrangements.items():
             arr_item = qtypes.Bool(name)

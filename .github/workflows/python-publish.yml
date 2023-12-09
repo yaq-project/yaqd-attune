@@ -36,4 +36,3 @@ jobs:
       run: |
         cd yaqg-attune
         flit publish
-  
