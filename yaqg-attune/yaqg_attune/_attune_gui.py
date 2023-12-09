@@ -64,7 +64,9 @@ class AttuneGUI(QtWidgets.QSplitter):
         self._root_item.append(traits_item)
         for trait in yaq_traits.__traits__.traits.keys():
             traits_item.append(
-                qtypes.Bool(label=trait, disabled=True, value=trait in self.qclient.traits)
+                qtypes.Bool(
+                    label=trait, disabled=True, value=trait in self.qclient.traits
+                )
             )
 
         # properties
@@ -137,4 +139,6 @@ class AttuneGUI(QtWidgets.QSplitter):
         self.update_plot()
 
     def on_get_position(self, pos):
-        self.plot_v_line.setValue(wt.units.convert(pos, self.units, self.plot_units.get_value()))
+        self.plot_v_line.setValue(
+            wt.units.convert(pos, self.units, self.plot_units.get_value())
+        )
