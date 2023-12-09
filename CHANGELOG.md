@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-- remove python pin to 3.10 (resolved upstream)
+- attune now works up to python 3.11 (resolved upstream)
 
 ## [2023.3.0]
 
