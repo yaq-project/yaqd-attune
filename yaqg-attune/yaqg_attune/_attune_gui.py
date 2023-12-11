@@ -1,5 +1,4 @@
 from functools import partial
-from typing import Dict
 
 from qtpy import QtWidgets, QtCore  # type: ignore
 import qtypes  # type: ignore
@@ -12,15 +11,13 @@ import attune  # type: ignore
 import yaq_traits  # type: ignore
 
 
-class AttuneDelayGUI(QtWidgets.QSplitter):
+class AttuneGUI(QtWidgets.QSplitter):
     def __init__(self, qclient: yaqc_qtpy.QClient):
         super().__init__()
         self.units = "nm"  # TODO synchronous getter calls at startup?
         self.arr = None
         self.plot_widget = yaqc_qtpy._plot.Plot1D(yAutoRange=True)
-        # self.plot_v_line = self.plot_widget.add_infinite_line(angle=90, hide=False)
-        self.arrangement_enum = qtypes.Enum("Arrangement")
-        self.arrangement_enum.updated_connect(self.on_arrangement_updated)
+        self.plot_v_line = self.plot_widget.add_infinite_line(angle=90, hide=False)
         self.tune_enum = qtypes.Enum("Tune")
         self.instrument_item = qtypes.Null("instrument")
         allowed_values = ["wn"] + list(wt.units.get_valid_conversions("wn"))
@@ -28,13 +25,9 @@ class AttuneDelayGUI(QtWidgets.QSplitter):
         self.qclient = qclient
         self.qclient.get_instrument.finished.connect(self.on_get_instrument)
         self.qclient.get_instrument()
-        self.qclient.get_control_active.finished.connect(self.on_get_control_active)
+        self.qclient.get_position.finished.connect(self.on_get_position)
+        self.qclient.get_arrangement.finished.connect(self.on_arrangement_updated)
         self._create_main_frame()
-        self.use_bools: Dict[str, bool] = {}
-
-        self.poll = QtCore.QTimer()
-        self.poll.timeout.connect(self.qclient.get_control_active)
-        self.poll.start(20)
 
     def _create_main_frame(self):
         # container widget
@@ -55,7 +48,6 @@ class AttuneDelayGUI(QtWidgets.QSplitter):
         # plot control
         display_item = qtypes.Null("Display")
         self._root_item.append(display_item)
-        display_item.append(self.arrangement_enum)
         self.tune_enum.updated_connect(self.update_plot)
         display_item.append(self.tune_enum)
         self.plot_units.updated_connect(self.update_plot)
@@ -72,7 +64,9 @@ class AttuneDelayGUI(QtWidgets.QSplitter):
         self._root_item.append(traits_item)
         for trait in yaq_traits.__traits__.traits.keys():
             traits_item.append(
-                qtypes.Bool(label=trait, disabled=True, value=trait in self.qclient.traits)
+                qtypes.Bool(
+                    label=trait, disabled=True, value=trait in self.qclient.traits
+                )
             )
 
         # properties
@@ -103,8 +97,8 @@ class AttuneDelayGUI(QtWidgets.QSplitter):
     def update_plot(self, val=None):
         if not hasattr(self, "instrument"):
             return
-        arr = self.arrangement_enum.get_value()
-        if not arr:
+        arr = self.arr
+        if arr is None:
             return
         motor_name = self.tune_enum.get_value()
         tune = self.instrument.arrangements[arr][motor_name]
@@ -129,27 +123,22 @@ class AttuneDelayGUI(QtWidgets.QSplitter):
 
     def on_get_instrument(self, json):
         self.instrument = attune.Instrument(**json)
-        self.arrangement_enum.set({"allowed": list(self.instrument.arrangements.keys())})
+        self.update_plot()
         # TODO empty instrument item
         for name, arr in self.instrument.arrangements.items():
-            arr_item = qtypes.Bool(name)
-            self.use_bools[name] = arr_item
-
-            def update_use(val, name=name):
-                self.qclient.set_control_active(name, val["value"])
-
-            arr_item.edited_connect(update_use)
+            arr_item = qtypes.String(
+                name, value=f"{arr.ind_min:0.3f} - {arr.ind_max:0.3f} nm", disabled=True
+            )
             self.instrument_item.append(arr_item)
             for tune in arr.tunes.keys():
                 arr_item.append(qtypes.Null(tune))
-        self.update_plot()
 
     def on_arrangement_updated(self, arr):
-        arr = arr["value"]
-        if arr:
-            self.tune_enum.set({"allowed": list(self.instrument[arr].keys())})
-            self.update_plot()
+        self.arr = arr
+        self.tune_enum.set({"allowed": list(self.instrument[arr].keys())})
+        self.update_plot()
 
-    def on_get_control_active(self, active):
-        for name, use in self.use_bools.items():
-            use.set({"value": active.get(name, False)})
+    def on_get_position(self, pos):
+        self.plot_v_line.setValue(
+            wt.units.convert(pos, self.units, self.plot_units.get_value())
+        )

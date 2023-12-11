@@ -52,7 +52,9 @@ class AttuneDelay(HasDependents, HasLimits, IsHomeable, HasPosition, IsDaemon):
                 continue
             if not arrangement in self._instrument[key].keys():
                 continue
-            res += self._instrument[key][arrangement](self._state["control_position"][key])
+            res += self._instrument[key][arrangement](
+                self._state["control_position"][key]
+            )
         return res
 
     def get_instrument(self):

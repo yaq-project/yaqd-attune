@@ -22,7 +22,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip!=22.1.*
         python -m pip install --upgrade mypy
-        python -m pip install .
-    - name: Run mypy
+        python -m pip install ./yaqd-attune
+    - name: Run mypy yaqd
       run: |
+        cd yaqd-attune
         mypy yaqd_attune
+    - name: Run mypy yaqg
+      run: |
+        cd yaqg-attune
+        mypy yaqg_attune

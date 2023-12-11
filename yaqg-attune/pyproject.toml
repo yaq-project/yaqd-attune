@@ -1,0 +1,60 @@
+[build-system]
+requires = ["flit_core >=2,<4,!=3.7.0"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.metadata]
+module = "yaqg_attune"
+dist-name = "yaqg-attune"
+author = "yaq developers"
+home-page = "https://yaq.fyi"
+description-file = "README.md"
+requires-python = ">=3.7"
+requires = [
+  "attune",
+  "yaqc",
+  "WrightTools",
+  "qtpy",
+  "qtypes",
+  "yaqc-qtpy",
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Scientific/Engineering",
+]
+
+[tool.flit.metadata.urls]
+Source = "https://github.com/yaq-project/yaqd-attune"
+Issues = "https://github.com/yaq-project/yaqd-attune/issues"
+
+[tool.flit.metadata.requires-extra]
+dev = ["black", "pre-commit"]
+
+[tool.flit.entrypoints."yaqc_qtpy.main.attune"]
+attune = "yaqg_attune._attune_gui:AttuneGUI"
+
+[tool.flit.entrypoints."yaqc_qtpy.main.attune_delay"]
+attune-delay = "yaqg_attune.gui._attune_delay_gui:AttuneDelayGUI"
+
+[tool.black]
+line-length = 99
+target-version = ['py37', 'py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | build
+  | dist
+)/
+'''

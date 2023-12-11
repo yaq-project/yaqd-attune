@@ -45,7 +45,9 @@ class Attune(HasDependents, HasLimits, IsHomeable, HasPosition, IsDaemon):
         self._state["position"] = position
         if exceptions is None:
             exceptions = []
-        for name, set_pos in self._instrument(position, self._state["arrangement"]).items():
+        for name, set_pos in self._instrument(
+            position, self._state["arrangement"]
+        ).items():
             if name in exceptions:
                 continue
             if isinstance(set_pos, str):
@@ -71,7 +73,10 @@ class Attune(HasDependents, HasLimits, IsHomeable, HasPosition, IsDaemon):
         return self._state["arrangement"]
 
     def set_arrangement(self, arrangement):
-        if arrangement is not None and arrangement not in self._instrument.arrangements.keys():
+        if (
+            arrangement is not None
+            and arrangement not in self._instrument.arrangements.keys()
+        ):
             raise ValueError("Arrangement not found")
         self._busy = True
         self._state["arrangement"] = arrangement
@@ -137,8 +142,12 @@ class Attune(HasDependents, HasLimits, IsHomeable, HasPosition, IsDaemon):
             self._state["hw_limits"] = [min_, max_]
         else:
             self._state["hw_limits"] = [
-                float(self._instrument.arrangements[self._state["arrangement"]].ind_min),
-                float(self._instrument.arrangements[self._state["arrangement"]].ind_max),
+                float(
+                    self._instrument.arrangements[self._state["arrangement"]].ind_min
+                ),
+                float(
+                    self._instrument.arrangements[self._state["arrangement"]].ind_max
+                ),
             ]
 
     async def update_state(self):
