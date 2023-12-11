@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+- attune now works up to python 3.11 (resolved upstream)
+
 ## [2023.3.0]
 
 ### Changed
