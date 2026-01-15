@@ -2,6 +2,7 @@ __all__ = ["Attune"]
 
 import asyncio
 from typing import Dict, Any, List, Union, Optional
+import numpy as np
 
 import attune  # type: ignore
 import yaqc  # type: ignore
@@ -48,6 +49,10 @@ class Attune(HasDependents, HasLimits, IsHomeable, HasPosition, IsDaemon):
         for name, set_pos in self._instrument(position, self._state["arrangement"]).items():
             if name in exceptions:
                 continue
+            try:
+                set_pos = set_pos.item()
+            except AttributeError:
+                pass
             if isinstance(set_pos, str):
                 self._setables[name].set_identifier(set_pos)
             elif set_pos is None:
