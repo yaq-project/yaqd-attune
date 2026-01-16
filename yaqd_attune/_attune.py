@@ -49,7 +49,8 @@ class Attune(HasDependents, HasLimits, IsHomeable, HasPosition, IsDaemon):
         for name, set_pos in self._instrument(position, self._state["arrangement"]).items():
             if name in exceptions:
                 continue
-            set_pos = set_pos.item()  # needs attune > 0.5.1
+            if isinstance(set_pos, np.ndarray):
+                set_pos = set_pos.item()
             if isinstance(set_pos, str):
                 self._setables[name].set_identifier(set_pos)
             elif set_pos is None:
