@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-- attune now works up to python 3.11 (resolved upstream)
+- roll python tests to 3.12-14
 
 ## [2023.3.0]
 
