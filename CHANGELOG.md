@@ -5,8 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-- handles numpy scalar values from attune Notes correctly
+## [2026.1.0]
+
+### Changed
+
 - roll python tests to 3.12-14
+
+### Fixed
+
+- handles numpy scalar values from attune Notes correctly
 
 ## [2023.3.0]
 
@@ -81,8 +88,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - initial release
 
-[Unreleased]: https://github.com/yaq-project/yaqd-attune/compare/v2023.3.0...HEAD
-[2023.3.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.7.0...v2023.3.0
+[Unreleased]: https://github.com/yaq-project/yaqd-attune/compare/v2026.1.0...main
+[2026.1.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.7.0...v2026.1.0
 [2022.7.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.6.0...v2022.7.0
 [2022.6.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.3.0...v2022.6.0
 [2022.3.0]: https://github.com/yaq-project/yaqd-attune/compare/v2022.1.0...v2022.3.0
