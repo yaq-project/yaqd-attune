@@ -26,13 +26,19 @@ class Attune(HasDependents, HasLimits, IsHomeable, HasPosition, IsDaemon):
 
         self._delays = dict()
         for k, v in config["delays"].items():
-            if isinstance(v, int):
-                self._delays[k] = yaqc.Client(v)
-            else:
-                host, port = v.split(":")
-                self._delays[k] = yaqc.Client(port=int(port), host=host)
-            self._delays[k].set_control_tune(self.name, self._state["arrangement"])
-            self._delays[k].set_control_position(self.name, self._state["position"])
+            try:
+                self.logger.info(f"{k}: {v}")
+                if isinstance(v, int):
+                    self._delays[k] = yaqc.Client(v)
+                else:
+                    host, port = v.split(":")
+                    self._delays[k] = yaqc.Client(port=int(port), host=host)
+                self._delays[k].set_control_tune(self.name, self._state["arrangement"])
+                self._delays[k].set_control_position(self.name, self._state["position"])
+            except Exception as e:
+                self.logger.info(f"trouble connecting to delay {k}:{v}")
+                self.logger.exception(e)
+                raise e
 
         self._set_limits()
         self._units = "nm"
